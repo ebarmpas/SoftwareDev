@@ -1,37 +1,26 @@
-Mold mold[];
-color c[];
-color background = color(0, 0, 0);
-int numOfLines = 6;
-int cutOffDivider = 7;
+Mold mold1, mold2;
+
 void setup() {
-  size(800, 600);
-  mold = new Mold[numOfLines];
-  c = new color[numOfLines];
-  c[0] = color( 255, 0, 0);
-  c[1] = color( 0, 255, 0);
-  c[2] = color( 0, 0, 255 );
-  c[3] = color(255, 255, 0 );
-  c[4] = color(0, 255, 255 );
-  c[5] = color( 255, 0, 255);
-  for (int i = 0; i < numOfLines; i++)
-    mold[i] = new Mold((width/8)*(i+1), (height/8)*(i+1), i, c[i]);
-  //rectMode(CORNERS);
-  //color(255);
-  //rect(width-width/cutOffDivider, height/cutOffDivider, width/cutOffDivider, height -height/cutOffDivider);
-  frameRate(60);
-  background(background);
+  size(1280, 720);
+  colorMode(HSB);
+
+  mold1 = new Mold(1, 800, 5, color(140, 150, 255));
+  mold2 = new Mold(1, 800, 5, color(50, 150, 255));
+  frameRate(30);
+  background(0);
 }
 
 void draw() {
-  background(background);
-  //noFill();
-  //strokeWeight(2);
-  //stroke(255);
-  //rect(width-width/cutOffDivider, height/cutOffDivider, width/cutOffDivider, height -height/cutOffDivider);
+  background(0);
+  mold1.step();
+  mold1.avoidEdges();
+  for(int i = 0; i < 4; i++)
+  mold1.goTowardsPoint(new PVector(width-width/(i+1), height/2));
+  mold1.display();
 
-  for (int i = 0; i < numOfLines; i++) {
-    mold[i].step();
-    mold[i].avoidEdges();  
-    mold[i].display();
-  }
+  mold2.step();
+  mold2.avoidEdges();
+   for(int i = 0; i < 4; i++)
+  mold2.goTowardsPoint(new PVector(width/2, height-height/(i+1)));
+  mold2.display();
 }
