@@ -1,10 +1,10 @@
-class PerlinWalker {
+    class PerlinWalker {
   PVector velocity;
   PVector acceleration;
   PVector location;
 
   int cutOffDivider = 8;
-  int edgeRepulsion = 50;
+  int edgeRepulsion = 500;
 
   float x;
   float y;
@@ -22,7 +22,6 @@ class PerlinWalker {
     velocity = new PVector (x, y);
   }
   void step() {
-    //println("aa");
     velocity.add(acceleration);
     tx+=1;
     ty+=1;
@@ -41,7 +40,6 @@ class PerlinWalker {
     PVector f = PVector.sub(location, point);
     if (f.magSq() < cutOff*cutOff){
       applyForce(PVector.sub(location, point));
-      println("avoid");
     }
   }
   void goTowardsPoint(PVector point, int cutOff, int l) {
