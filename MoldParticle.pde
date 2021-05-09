@@ -1,5 +1,5 @@
 class MoldParticle extends PerlinWalker {
-
+  //PLEASE DO NOT DELETE THE TRAIL CODE IT'S ALL I HAVE LEFT FROM THE GLORY DAYS - VAGGELIS.
   //PVector trail[];
   //int ind;
 

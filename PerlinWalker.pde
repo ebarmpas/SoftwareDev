@@ -1,10 +1,10 @@
-    class PerlinWalker {
+class PerlinWalker {
   PVector velocity;
   PVector acceleration;
   PVector location;
 
   int cutOffDivider = 8;
-  int edgeRepulsion = 500;
+  int edgeRepulsion = 8000;
 
   float x;
   float y;
@@ -28,24 +28,24 @@
     x=map(noise(tx), 0, 1, 0, width);
     y=map(noise(ty), 0, 1, 0, height);
     velocity.add(x, y).mult(0.001);
-    velocity.limit(4);    
+    velocity.limit(3);    
     location.add(velocity);
   }
   void applyForce(PVector force) {
-   
+
     acceleration.add(force);
   }
 
-  void avoidPoint(PVector point, int cutOff) {
+  void avoidPoint(PVector point, int cutOff, int l, int m) {
     PVector f = PVector.sub(location, point);
-    if (f.magSq() < cutOff*cutOff){
-      applyForce(PVector.sub(location, point));
+    if (f.magSq() < cutOff*cutOff) {
+      applyForce(f.mult(m).limit(l));
     }
   }
-  void goTowardsPoint(PVector point, int cutOff, int l) {
+  void goTowardsPoint(PVector point, int cutOff, int l, int m) {
     PVector f = PVector.sub(point, location);
-    if(f.magSq() < cutOff*cutOff){
-      applyForce(f.limit(l));
+    if (f.magSq() < cutOff*cutOff) {
+      applyForce(f.mult(m).limit(l));
     }
   }
 
@@ -62,19 +62,22 @@
       force.y = map(location.y, 0, (height/cutOffDivider), 1, edgeRepulsion);
     }
     if (location.x > width)
-      location.x = width-1;
+      location.x = height/2;
     else if (location.x <0)
-      location.x = 1;
-
-    //if (location.y > height)
-    //  location.y = height-1;
-    //else if (location.y <0)
-    //  location.y = 1;
+      location.x = height/2;
+      
+    if (location.y > height)
+      location.y = width/2;
+    else if (location.y <0)
+      location.y = width/2;
     applyForce(force);
   }
+  boolean isOutOfBounds() {
+    if (location.x >= width - width/cutOffDivider || location.x <= width/cutOffDivider || location.y >= height - height / cutOffDivider|| location.y <= height / cutOffDivider)
+      return true;
 
-
-
+    return false;
+  }
 
   void bounceOnEdges() {
     if (location.x <= 0) {
