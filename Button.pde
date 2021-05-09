@@ -6,6 +6,7 @@ class Button {
   color outlineColor;
   color textColor;
   int textSize;
+  long counter = 0;
   Button(PVector c1, PVector c3, char k, String l, color fc, color oc, color tc) {
     corner1 = new PVector(c1.x, c1.y);
     corner3 = new PVector(c3.x, c3.y);
@@ -18,9 +19,12 @@ class Button {
   }
 
   boolean isPressed() {
-    if (keyPressed && key == keyz) 
+    if (keyPressed && key == keyz && counter >= 8) {
+      counter = 0;
       return true;
+    }
 
+    counter++;
     return false;
   }
 

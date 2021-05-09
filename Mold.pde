@@ -1,12 +1,10 @@
 class Mold {
 
-  int species;
   ArrayList<MoldParticle> particles;
   color moldColor;
   //color gradient[];
 
-  Mold(int s, int numOfParticles, color c) { // int trailSize
-    species = s;
+  Mold(int numOfParticles, color c) { // int trailSize
     moldColor = c;
     particles = new ArrayList<MoldParticle>();
     for (int i = 0; i < numOfParticles; i++) {
@@ -35,21 +33,19 @@ class Mold {
   void avoidEdges() {
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).avoidEdges();
-
     }
   }
 
   void goTowardsPoint(PVector point, int cutOff, int l, int m) {
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).goTowardsPoint(point, cutOff, l, m);
-
     }
   }
-  void cohere(int cutOff, int l, int m) {
+  void cohere(int cutOff, int l, float m) {
     for (int i = 0; i < particles.size(); i++)
       for (int j = 0; i < particles.size(); i++) {
-        if(i == j)
-        break;
+        if (i == j)
+          break;
         particles.get(i).goTowardsPoint(particles.get(j).location, cutOff, l, m);
       }
   }
@@ -59,6 +55,14 @@ class Mold {
     }
   }
 
+  void addParticles(int n) {
+    for (int i = 0; i< n; i++)
+      particles.add(new MoldParticle(new PVector(random(0, width), random(0, height))));
+  }
+  void removeParticles(int n) {
+    for (int i = 0; i< n; i++)
+      particles.remove(particles.size()-1);
+  }
   //void drawVectors() {
   //  for (int i = 0; i < particles.length; i++)
   //    particles[i].drawVectors();

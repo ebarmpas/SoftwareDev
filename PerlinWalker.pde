@@ -36,13 +36,13 @@ class PerlinWalker {
     acceleration.add(force);
   }
 
-  void avoidPoint(PVector point, int cutOff, int l, int m) {
+  void avoidPoint(PVector point, int cutOff, int l, float m) {
     PVector f = PVector.sub(location, point);
     if (f.magSq() < cutOff*cutOff) {
       applyForce(f.mult(m).limit(l));
     }
   }
-  void goTowardsPoint(PVector point, int cutOff, int l, int m) {
+  void goTowardsPoint(PVector point, int cutOff, int l, float m) {
     PVector f = PVector.sub(point, location);
     if (f.magSq() < cutOff*cutOff) {
       applyForce(f.mult(m).limit(l));
