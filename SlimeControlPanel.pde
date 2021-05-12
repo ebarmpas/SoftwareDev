@@ -126,9 +126,9 @@ class SlimeControlPanel {
 
     text("Size : " + maxSize + " ( " + currentSize + " )", start.x + buttonSizeX + (paddingSize/2), start.y);
     text("Growth : " + growthRate + " ( " + String.format("%.2f",(100-((maxSize-currentSize)/float(maxSize)*100))) + "% )", start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*4); //FIX
-    text("Coherency M : " + slimeCoherencyM, start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*7);
+    text("Coherency M : " + String.format("%.2f", slimeCoherencyM), start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*7);
     text("Coherency L : " + slimeCoherencyL, start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*10);
-    text("Xenophobia M : " + slimeXenophobiaM, start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*14);
+    text("Xenophobia M : " + String.format("%.2f", slimeXenophobiaM), start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*14);
     text("Xenophobia L : " + slimeXenophobiaL, start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*17);
 
     decreaseSize5.display();

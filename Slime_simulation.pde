@@ -20,7 +20,7 @@ int activeSpecies;
 color []colorPalette = {color(255, 255, 0), color(255, 0, 255), color(0, 255, 255), color(255, 127, 0), color(255, 0, 127), color(0, 255, 127)};
 boolean []isAvaibleColor;
 
-PVector middle;
+PerlinWalker attractionPoint;
 
 final int framerate = 60;
 void setup() {
@@ -41,7 +41,7 @@ void setup() {
   xenophobiaM = new ArrayList<Float>();
   xenophobiaL = new ArrayList<Integer>();
   moldColor = new ArrayList<Integer>();
-  middle = new PVector (width/2, height/2);
+  attractionPoint = new PerlinWalker (new PVector(random(0, width), random(0, height)));
   isAvaibleColor = new boolean[colorPalette.length];
   for (int i = 0; i < isAvaibleColor.length; i++)
     isAvaibleColor[i] = true; 
@@ -66,24 +66,24 @@ void draw() {
   for (int i = 0; i < moldList.size(); i++) {
     if (!isPaused) {
 
+      if (frameCount % framerate == 0)
+        if (maxSize.get(i) >= currentSize.get(i)) {
+          if ( maxSize.get(i)-currentSize.get(i) > growthRate.get(i))
+            moldList.get(i).addParticles(growthRate.get(i));
+          else
+            moldList.get(i).addParticles(maxSize.get(i)-currentSize.get(i));
 
-      if (maxSize.get(i) >= currentSize.get(i)) {
-        if ( maxSize.get(i)-currentSize.get(i) > growthRate.get(i))
-          moldList.get(i).addParticles(growthRate.get(i));
-        else
-          moldList.get(i).addParticles(maxSize.get(i)-currentSize.get(i));
+          currentSize.set(i, moldList.get(i).particles.size());
+        }
+      if (frameCount % framerate == 0)
+        if (maxSize.get(i) <= currentSize.get(i)) {
+          if ( currentSize.get(i) - maxSize.get(i) > growthRate.get(i))
+            moldList.get(i).removeParticles(growthRate.get(i));
+          else
+            moldList.get(i).removeParticles(currentSize.get(i)-maxSize.get(i));
 
-        currentSize.set(i, moldList.get(i).particles.size());
-      }
-
-      if (maxSize.get(i) <= currentSize.get(i)) {
-        if ( currentSize.get(i) - maxSize.get(i) > growthRate.get(i))
-          moldList.get(i).removeParticles(growthRate.get(i));
-        else
-          moldList.get(i).removeParticles(currentSize.get(i)-maxSize.get(i));
-
-        currentSize.set(i, moldList.get(i).particles.size());
-      }
+          currentSize.set(i, moldList.get(i).particles.size());
+        }
       moldList.get(i).step();
       moldList.get(i).cohere(width, coherencyL.get(i), coherencyM.get(i));
 
@@ -94,13 +94,14 @@ void draw() {
             if (!moldList.get(j).particles.get(n).isOutOfBounds())
               moldList.get(i).avoidPoint(moldList.get(j).particles.get(n).location, 100, 100, 1);
 
-      //moldList.get(i).goTowardsPoint(middle, width, 100, 20000); 
-      //moldList.get(i).goTowardsPoint(new PVector(width-width/2, height-height/2), width, 100, 20000); 
-      //moldList.get(i).goTowardsPoint(new PVector(width/2, height/2), width, 100, 20000); 
-
       moldList.get(i).avoidEdges();
+      moldList.get(i).goTowardsPoint(attractionPoint.location, width, 6, 400);
     }
     moldList.get(i).display();
+  }
+  if (!isPaused) {
+    attractionPoint.step();
+    attractionPoint.avoidEdges();
   }
   if (previous.isPressed()) {
     if (activeSpecies == 0)
@@ -118,7 +119,7 @@ void draw() {
     if (isPaused)
       isPaused = false;
     else 
-      isPaused = true;
+    isPaused = true;
   }
   if (add.isPressed()) {
     if (moldList.size()<colorPalette.length) 
@@ -156,9 +157,9 @@ void draw() {
     growthRate.set(activeSpecies, growthRate.get(activeSpecies)+10);
 
   if (scp.get(activeSpecies).decreaseCoherencyM_0_1.isPressed() && coherencyM.get(activeSpecies) >= 0.1)
-    coherencyM.set(activeSpecies, coherencyM.get(activeSpecies)-0.1);
+    coherencyM.set(activeSpecies, coherencyM.get(activeSpecies)- 0.10000000f);
   if (scp.get(activeSpecies).increaseCoherencyM_0_1.isPressed())
-    coherencyM.set(activeSpecies, coherencyM.get(activeSpecies)+0.1);
+    coherencyM.set(activeSpecies, coherencyM.get(activeSpecies)+ 0.1000000f);
 
   if (scp.get(activeSpecies).decreaseCoherencyM1.isPressed() && coherencyM.get(activeSpecies) >= 1)
     coherencyM.set(activeSpecies, coherencyM.get(activeSpecies)-1);
@@ -182,9 +183,9 @@ void draw() {
 
 
   if (scp.get(activeSpecies).decreaseXenophobiaM_0_1.isPressed() && xenophobiaM.get(activeSpecies) >= 0.1)
-    xenophobiaM.set(activeSpecies, xenophobiaM.get(activeSpecies)- 0.1);
+    xenophobiaM.set(activeSpecies, xenophobiaM.get(activeSpecies)- 0.10000000f);
   if (scp.get(activeSpecies).increaseXenophobiaM_0_1.isPressed())
-    xenophobiaM.set(activeSpecies, xenophobiaM.get(activeSpecies) + 0.1);
+    xenophobiaM.set(activeSpecies, xenophobiaM.get(activeSpecies) + 0.10000000f);
 
   if (scp.get(activeSpecies).decreaseXenophobiaM1.isPressed() && xenophobiaM.get(activeSpecies) >= 1)
     xenophobiaM.set(activeSpecies, xenophobiaM.get(activeSpecies)- 1);
@@ -203,7 +204,7 @@ void draw() {
 
   if (scp.get(activeSpecies).decreaseXenophobiaL50.isPressed() && xenophobiaL.get(activeSpecies) >= 50)
     xenophobiaL.set(activeSpecies, xenophobiaL.get(activeSpecies)- 50);
-  if (scp.get(activeSpecies).increaseXenophobiaL10.isPressed())
+  if (scp.get(activeSpecies).increaseXenophobiaL50.isPressed())
     xenophobiaL.set(activeSpecies, xenophobiaL.get(activeSpecies) + 50);
 
   scp.get(activeSpecies).display(currentSize.get(activeSpecies), maxSize.get(activeSpecies), growthRate.get(activeSpecies), coherencyM.get(activeSpecies), coherencyL.get(activeSpecies), xenophobiaM.get(activeSpecies), xenophobiaL.get(activeSpecies));
@@ -218,13 +219,13 @@ void addSlime() {
   int colorIndex = nextAvaibleColor();
   scp.add(new SlimeControlPanel(new PVector(25, 75), colorPalette[colorIndex]));
 
-  maxSize.add(250);
-  currentSize.add(200);
-  growthRate.add(1);
-  coherencyM.add(1.0);
-  coherencyL.add(100);
-  xenophobiaM.add(1.0);
-  xenophobiaL.add(100);
+  maxSize.add(750);
+  currentSize.add(300);
+  growthRate.add(10);
+  coherencyM.add(5.0);
+  coherencyL.add(400);
+  xenophobiaM.add(9.0);
+  xenophobiaL.add(500);
 
   moldColor.add(colorIndex);
   isAvaibleColor[colorIndex] = false;
