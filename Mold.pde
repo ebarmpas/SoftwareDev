@@ -42,6 +42,8 @@ class Mold {
     }
   }
   void cohere(int cutOff, int l, float m) {
+    //for (int i = 1; i < particles.size(); i++)
+    //  particles.get(i).goTowardsPoint(particles.get(i-1).location, cutOff,l,m);
     for (int i = 0; i < particles.size(); i++)
       for (int j = 0; i < particles.size(); i++) {
         if (i == j)
@@ -49,7 +51,7 @@ class Mold {
         particles.get(i).goTowardsPoint(particles.get(j).location, cutOff, l, m);
       }
   }
-  void avoidPoint(PVector point, int cutOff, int l, int m) {
+  void avoidPoint(PVector point, int cutOff, int l, float m) {
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).avoidPoint(point, cutOff, l, m);
     }
