@@ -4,15 +4,17 @@ class PerlinWalker {
   PVector location;
 
   int cutOffDivider = 8;
-  int edgeRepulsion = 8000;
-
+  int edgeRepulsion = 100;
+  int maxSpeed;
   float x;
   float y;
   float tx, ty;
-  PerlinWalker(PVector loc) {
+  PerlinWalker(PVector loc, int ms) {
 
     location = new PVector(loc.x, loc.y);
     acceleration = PVector.random2D();
+  
+     maxSpeed = ms;
 
     tx=0;
     ty=0;
@@ -20,15 +22,17 @@ class PerlinWalker {
     y=map(noise(ty), 0, 1, 0, height);
 
     velocity = new PVector (x, y);
+    velocity = new PVector ();
   }
   void step() {
+    acceleration.limit(2500);
     velocity.add(acceleration);
-    tx+=1;
-    ty+=1;
+    tx+=0.2;
+    ty+=0.2;
     x=map(noise(tx), 0, 1, 0, width);
     y=map(noise(ty), 0, 1, 0, height);
-    velocity.add(x, y).mult(0.001);
-    velocity.limit(3);    
+    velocity.add(x, y);
+    velocity.limit(maxSpeed);
     location.add(velocity);
   }
   void applyForce(PVector force) {
@@ -39,13 +43,17 @@ class PerlinWalker {
   void avoidPoint(PVector point, int cutOff, int l, float m) {
     PVector f = PVector.sub(location, point);
     if (f.magSq() < cutOff*cutOff) {
-      applyForce(f.mult(m).limit(l));
+      f.limit(l);
+      f.mult(m);
+      applyForce(f);
     }
   }
   void goTowardsPoint(PVector point, int cutOff, int l, float m) {
     PVector f = PVector.sub(point, location);
     if (f.magSq() < cutOff*cutOff) {
-      applyForce(f.mult(m).limit(l));
+      f.limit(l);
+      f.mult(m);
+      applyForce(f);
     }
   }
 
@@ -62,14 +70,14 @@ class PerlinWalker {
       force.y = map(location.y, 0, (height/cutOffDivider), 1, edgeRepulsion);
     }
     if (location.x > width)
-      location.x = height/2;
+      location.x = width/2;
     else if (location.x <0)
-      location.x = height/2;
-      
+      location.x = width/2;
+
     if (location.y > height)
-      location.y = width/2;
+      location.y = height/2;
     else if (location.y <0)
-      location.y = width/2;
+      location.y = height/2;
     applyForce(force);
   }
   boolean isOutOfBounds() {
@@ -107,5 +115,11 @@ class PerlinWalker {
       location.y = height;
     if (location.y > height)
       location.y = 0;
+  }
+
+  void displayHead(int weight, color c) {
+    strokeWeight(weight);
+    stroke(c);
+    point(location.x, location.y);
   }
 }

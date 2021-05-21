@@ -3,8 +3,8 @@ class MoldParticle extends PerlinWalker {
   //PVector trail[];
   //int ind;
 
-  MoldParticle(PVector loc) { //int maxL
-    super(loc);
+  MoldParticle(PVector loc, int ms) { //int maxL
+    super(loc, ms);
     //ind = 0;
     //trail = new PVector[maxL];
     //for (int i = 0; i < maxL; i++)
@@ -14,11 +14,6 @@ class MoldParticle extends PerlinWalker {
   //  trail[ind] = new PVector(location.x, location.y);
   //  ind = (ind+1) % trail.length;
   //}
-  void displayHead(int weight, color c) {
-    strokeWeight(weight);
-    stroke(c);
-    point(location.x, location.y);
-  }
 
   //  void displayTrail(int index,int weight, color c) {
   //  strokeWeight(weight);

@@ -23,6 +23,7 @@ boolean []isAvaibleColor;
 PerlinWalker attractionPoint;
 
 final int framerate = 60;
+
 void setup() {
   //P2D supposedly uses OpenGL to render but performance seems the same.
   size(1600, 900, P2D);
@@ -41,7 +42,6 @@ void setup() {
   xenophobiaM = new ArrayList<Float>();
   xenophobiaL = new ArrayList<Integer>();
   moldColor = new ArrayList<Integer>();
-  attractionPoint = new PerlinWalker (new PVector(random(0, width), random(0, height)));
 
   isAvaibleColor = new boolean[colorPalette.length];
   for (int i = 0; i < isAvaibleColor.length; i++)
@@ -59,6 +59,9 @@ void setup() {
   isPaused = true;
   isVisible = true;
   addSlime();
+
+  attractionPoint = new PerlinWalker(new PVector(random(0, width), random(0, height)), 1);
+
   frameRate(framerate);
 }
 
@@ -88,23 +91,24 @@ void draw() {
         }
       }
       moldList.get(i).step();
-      moldList.get(i).cohere(width, coherencyL.get(i), coherencyM.get(i));
+      moldList.get(i).cohere(50, coherencyL.get(i), coherencyM.get(i));
 
       for (int j = 0; j < moldList.size(); j++) 
         if (i!=j)
-
           for (int n = 0; n < moldList.get(j).particles.size(); n++) 
             if (!moldList.get(j).particles.get(n).isOutOfBounds())
               moldList.get(i).avoidPoint(moldList.get(j).particles.get(n).location, 50, xenophobiaL.get(i).intValue(), xenophobiaM.get(i).floatValue());
 
-      moldList.get(i).avoidEdges();
-      moldList.get(i).goTowardsPoint(attractionPoint.location, width, 10, 500);
+      //moldList.get(i).avoidEdges();
+      moldList.get(i).passEdges();
+
+      attractionPoint.step();
+      attractionPoint.avoidEdges();
+      moldList.get(i).goTowardsPoint(new PVector(width/2, height/2), width, 25, 1);
+
+      moldList.get(i).goTowardsPoint(attractionPoint.location, width, 50, 1);
     }
     moldList.get(i).display();
-  }
-  if (!isPaused) {
-    attractionPoint.step();
-    attractionPoint.avoidEdges();
   }
   if (previous.isPressed()) {
     if (activeSpecies == 0)
@@ -226,17 +230,18 @@ void draw() {
   }
 }
 
+
 void addSlime() {
   int colorIndex = nextAvaibleColor();
   scp.add(new SlimeControlPanel(new PVector(25, 75), colorPalette[colorIndex]));
 
-  maxSize.add(500);
-  currentSize.add(400);
-  growthRate.add(20);
-  coherencyM.add(1f);
-  coherencyL.add(10);
-  xenophobiaM.add(1f);
-  xenophobiaL.add(20);
+  maxSize.add(1000);
+  currentSize.add(1000);
+  growthRate.add(25);
+  coherencyM.add(4f);
+  coherencyL.add(100);
+  xenophobiaM.add(8f);
+  xenophobiaL.add(100);
 
   moldColor.add(colorIndex);
   isAvaibleColor[colorIndex] = false;

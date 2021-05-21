@@ -8,7 +8,7 @@ class Mold {
     moldColor = c;
     particles = new ArrayList<MoldParticle>();
     for (int i = 0; i < numOfParticles; i++) {
-      particles.add(new MoldParticle(new PVector(random(0, width), random(0, height))));//, trailSize);
+      particles.add(new MoldParticle(new PVector(random(0, width), random(0, height)), 4));//, trailSize);
     }
 
     //gradient = new color[trailSize];
@@ -27,7 +27,7 @@ class Mold {
       //for(int j = 0; j < gradient.length ; j++){
       //  particles[i].displayTrail(j, 5, gradient[j]);
       //}
-      particles.get(i).displayHead(3, moldColor);
+      particles.get(i).displayHead(4, moldColor);
     }
   }
   void avoidEdges() {
@@ -36,7 +36,7 @@ class Mold {
     }
   }
 
-  void goTowardsPoint(PVector point, int cutOff, int l, int m) {
+  void goTowardsPoint(PVector point, int cutOff, int l, float m) {
     for (int i = 0; i < particles.size(); i++) {
       particles.get(i).goTowardsPoint(point, cutOff, l, m);
     }
@@ -59,11 +59,15 @@ class Mold {
 
   void addParticles(int n) {
     for (int i = 0; i< n; i++)
-      particles.add(new MoldParticle(new PVector(random(0, width), random(0, height))));
+      particles.add(new MoldParticle(new PVector(random(0, width), random(0, height)), 4));
   }
   void removeParticles(int n) {
     for (int i = 0; i< n; i++)
       particles.remove(particles.size()-1);
+  }
+  void passEdges(){
+    for(int i = 0; i < particles.size(); i++)
+      particles.get(i).passEdges();
   }
   //void drawVectors() {
   //  for (int i = 0; i < particles.length; i++)
