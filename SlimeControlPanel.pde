@@ -1,6 +1,5 @@
 class SlimeControlPanel {
   PVector start;
-
   int buttonSizeX = 90;
   int buttonSizeY = 35;
 
@@ -8,6 +7,7 @@ class SlimeControlPanel {
 
   int paddingSize = 12;
 
+  color slimeColor;
   Button decreaseSize5;
   Button increaseSize5;
 
@@ -56,8 +56,6 @@ class SlimeControlPanel {
   Button decreaseXenophobiaL50;
   Button increaseXenophobiaL50;
 
-
-  color slimeColor;
   SlimeControlPanel(PVector s, color c) {
     start = new PVector(s.x, s.y);
     slimeColor = c;
@@ -96,9 +94,9 @@ class SlimeControlPanel {
     increaseCoherencyL1 = new Button(new PVector(s.x + buttonSizeX + paddingSize, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX * 2 + paddingSize, s.y + buttonSizeY * (row+1) + labelSize), 'i', "+1(i)", color(0), c, color(255));
     row++;
     decreaseCoherencyL10 = new Button(new PVector(s.x, s.y + buttonSizeY*row + labelSize), new PVector(s.x + buttonSizeX, s.y + buttonSizeY * (row+1) + labelSize), 'j', "-10(j)", color(0), c, color(255));
-    increaseCoherencyL10 = new Button(new PVector(s.x + buttonSizeX + paddingSize, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX * 2 + paddingSize, s.y + buttonSizeY * (row+1) + labelSize), 'k', "+50(k)", color(0), c, color(255));
+    increaseCoherencyL10 = new Button(new PVector(s.x + buttonSizeX + paddingSize, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX * 2 + paddingSize, s.y + buttonSizeY * (row+1) + labelSize), 'k', "+10(k)", color(0), c, color(255));
     row++;
-    decreaseCoherencyL50 = new Button(new PVector(s.x, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX, s.y + buttonSizeY * (row+1) + labelSize), 'm', "-10(m)", color(0), c, color(255));
+    decreaseCoherencyL50 = new Button(new PVector(s.x, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX, s.y + buttonSizeY * (row+1) + labelSize), 'm', "-50(m)", color(0), c, color(255));
     increaseCoherencyL50 = new Button(new PVector(s.x + buttonSizeX + paddingSize, s.y + buttonSizeY * row + labelSize), new PVector(s.x + buttonSizeX * 2 + paddingSize, s.y + buttonSizeY * (row+1) + labelSize), ',', "+50(,)", color(0), c, color(255));
     row++;
     row++;
@@ -125,7 +123,7 @@ class SlimeControlPanel {
     textSize(labelSize);
 
     text("Size : " + maxSize + " ( " + currentSize + " )", start.x + buttonSizeX + (paddingSize/2), start.y);
-    text("Growth : " + growthRate + " ( " + String.format("%.2f",(100-((maxSize-currentSize)/float(maxSize)*100))) + "% )", start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*4); //FIX
+    text("Growth : " + growthRate + " ( " + String.format("%.2f", (100-((maxSize-currentSize)/float(maxSize)*100))) + "% )", start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*4); //FIX
     text("Coherency M : " + String.format("%.2f", slimeCoherencyM), start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*7);
     text("Coherency L : " + slimeCoherencyL, start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*10);
     text("Xenophobia M : " + String.format("%.2f", slimeXenophobiaM), start.x + buttonSizeX + (paddingSize/2), start.y + buttonSizeY*14);

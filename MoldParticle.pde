@@ -27,4 +27,26 @@ class MoldParticle extends PerlinWalker {
   //  stroke(0);
   //  strokeWeight(1);
   //}
+    void avoidPoint(PVector point, int cutOff, int l, float m) {
+    PVector f = PVector.sub(location, point);
+    if (f.magSq() < cutOff*cutOff) {
+      f.limit(l);
+      f.mult(m);
+      applyForce(f);
+    }
+  }
+  void goTowardsPoint(PVector point, int cutOff, int l, float m) {
+    PVector f = PVector.sub(point, location);
+    if (f.magSq() < cutOff*cutOff) {
+      f.limit(l);
+      f.mult(m);
+      applyForce(f);
+    }
+  }
+
+  void displayHead(int weight, color c) {
+    strokeWeight(weight);
+    stroke(c);
+    point(location.x, location.y);
+  }
 }

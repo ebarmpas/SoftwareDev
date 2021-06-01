@@ -1,6 +1,6 @@
 class PerlinWalker {
-  PVector velocity;
   PVector acceleration;
+  PVector velocity;
   PVector location;
 
   int cutOffDivider = 8;
@@ -13,8 +13,8 @@ class PerlinWalker {
 
     location = new PVector(loc.x, loc.y);
     acceleration = PVector.random2D();
-  
-     maxSpeed = ms;
+
+    maxSpeed = ms;
 
     tx=0;
     ty=0;
@@ -40,22 +40,6 @@ class PerlinWalker {
     acceleration.add(force);
   }
 
-  void avoidPoint(PVector point, int cutOff, int l, float m) {
-    PVector f = PVector.sub(location, point);
-    if (f.magSq() < cutOff*cutOff) {
-      f.limit(l);
-      f.mult(m);
-      applyForce(f);
-    }
-  }
-  void goTowardsPoint(PVector point, int cutOff, int l, float m) {
-    PVector f = PVector.sub(point, location);
-    if (f.magSq() < cutOff*cutOff) {
-      f.limit(l);
-      f.mult(m);
-      applyForce(f);
-    }
-  }
 
   void avoidEdges() {
     PVector force = new PVector();
@@ -69,15 +53,6 @@ class PerlinWalker {
     } else if (location.y < height/cutOffDivider) {
       force.y = map(location.y, 0, (height/cutOffDivider), 1, edgeRepulsion);
     }
-    if (location.x > width)
-      location.x = width/2;
-    else if (location.x <0)
-      location.x = width/2;
-
-    if (location.y > height)
-      location.y = height/2;
-    else if (location.y <0)
-      location.y = height/2;
     applyForce(force);
   }
   boolean isOutOfBounds() {
@@ -88,22 +63,16 @@ class PerlinWalker {
   }
 
   void bounceOnEdges() {
-    if (location.x <= 0) {
-      location.x = 2;
-      velocity.x *= -10;
-    }
-    if (location.x >= width) {
-      location.x = width - 2;
-      velocity.x *=-10;
-    }
-    if (location.y <= 0) {
-      location.y = 2;
-      velocity.y *= -10;
-    }
-    if (location.y >= height) {
-      location.y = height - 2;
-      velocity.y *=-10;
-    }
+    if (location.x <= 0) 
+      velocity.x *= -1;
+    else if (location.x >= width) 
+      velocity.x *=-1;
+  
+    if (location.y <= 0) 
+      velocity.y *= -1;
+    else if (location.y >= height) 
+      velocity.y *=-1;
+    
   }
 
   void passEdges() {
@@ -115,11 +84,5 @@ class PerlinWalker {
       location.y = height;
     if (location.y > height)
       location.y = 0;
-  }
-
-  void displayHead(int weight, color c) {
-    strokeWeight(weight);
-    stroke(c);
-    point(location.x, location.y);
   }
 }

@@ -22,7 +22,7 @@ boolean []isAvaibleColor;
 
 PerlinWalker attractionPoint;
 
-final int framerate = 60;
+final static int framerate = 60;
 
 void setup() {
   //P2D supposedly uses OpenGL to render but performance seems the same.
@@ -108,6 +108,9 @@ void draw() {
 
       moldList.get(i).goTowardsPoint(attractionPoint.location, width, 50, 1);
     }
+    //stroke(255);
+    //strokeWeight(10);
+    //point(attractionPoint.location.x, attractionPoint.location.y);
     moldList.get(i).display();
   }
   if (previous.isPressed()) {
@@ -230,7 +233,6 @@ void draw() {
   }
 }
 
-
 void addSlime() {
   int colorIndex = nextAvaibleColor();
   scp.add(new SlimeControlPanel(new PVector(25, 75), colorPalette[colorIndex]));
@@ -254,7 +256,7 @@ int nextAvaibleColor() {
     if (isAvaibleColor[i] == true)
       return i;
 
-  //Just here to satisfy Java, if this is called, a color will be found.
+  //Just here to satisfy Java, if this is called, a color will be found, so this will never be reached.
   return -1;
 }
 void removeSlime(int index) {
